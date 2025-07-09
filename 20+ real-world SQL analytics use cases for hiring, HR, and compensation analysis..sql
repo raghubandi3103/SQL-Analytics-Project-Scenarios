@@ -1,16 +1,14 @@
-1.	--You're a Compensation analyst employed by a multinational corporation. Your Assignment is to Pinpoint Countries who give work fully remotely,
+1.--You're a Compensation analyst employed by a multinational corporation. Your Assignment is to Pinpoint Countries who give work fully remotely,
 --for the title 'managers’ Paying salaries Exceeding $90,000 USD
 
-SELECT distinct company_location 
-FROM salaries 
+SELECT distinct company_location FROM salaries 
 where remote_ratio = 100 and job_title  like '%manager%' and (salary_in_usd > 90000)
 
 
-2.	---AS a remote work advocate Working for a progressive HR tech startup who place their freshers’ clients IN large tech firms. you're tasked WITH Identifying top 5
+2.---AS a remote work advocate Working for a progressive HR tech startup who place their freshers’ clients IN large tech firms. you're tasked WITH Identifying top 5
 --Country Having greatest count of large (company size) number of companies.
 
 select distinct experience_level  from dbo.salaries 
-
 
 select top 5 company_location,count(company_location) as Total_employees_per_country
 from salaries 
@@ -24,7 +22,6 @@ order by Total_employees_per_country desc
 --WHERE there are more than 50 employees, Ensuring a robust sample size for your analysis.
 
 select * from salaries 
-
 
 select job_title, AVG(salary_in_usd) as Average_salary_amount
 from [dbo].[salaries] 
@@ -58,16 +55,12 @@ with Jobtitle_average_salary as (
 	group by job_title
 	),
 
-
-
  main_table as (
 select company_location,job_title,AVG(salary_in_usd) as compare_salary
 from salaries 
 where experience_level='EN'
 group by company_location,job_title
 )
-
-
 
 select m.company_location,m.job_title,m.compare_salary,J.avg_salary
 from main_table m 
@@ -83,7 +76,6 @@ order by m.compare_salary desc
 --Country pays the maximum average salary. This helps you to place your candidates IN those countries.
 
 
-
 with JobTitleCountryAverage as (
 	SELECT job_title,company_location as country ,avg(salary_in_usd) as average_salary
 	from salaries 
@@ -93,7 +85,6 @@ MaxCountryPerJob as (
   select job_title,max(average_salary) as max_avg_salary
   from JobTitleCountryAverage
   group by job_title )
-
 
 select JTCA.job_title,country,MCPJ.max_avg_salary
 from JobTitleCountryAverage  JTCA
@@ -112,11 +103,9 @@ select job_title,country,average_salary,Salary_rank
 from Rankedsalaries
 where Salary_rank=1
 
-
 --7.AS a data-driven Business consultant, you've been hired by a multinational corporation to analyze salary trends across different company Locations.
 --Your goal is to Pinpoint Locations WHERE the average salary Has consistently Increased over the Past few years (Countries WHERE data is available for 3 years
 --Only(present year and past two years) providing Insights into Locations experiencing Sustained salary growth.
-
 
 WITH CountryJobAverageByYear24 as (
 	select  job_title,company_location as company,AVG(salary_in_usd) as avg_salary24
@@ -141,8 +130,8 @@ where (four.job_title=Three.job_title and four.job_title=two.job_title) and (fou
 
 --8.Picture yourself AS a workforce strategist employed by a global HR tech startup. Your Mission is to Determine the percentage of fully remote work for 
 --each experience level IN 2021 and compare it WITH the corresponding figures for 2024, Highlighting any significant Increases or decreases IN remote work Adoption over the years.
-
 --2021
+	
 (select a.experience_level,round(cast(b.total_employees_2021_remote as float)/cast(a.total_employees_2021 as float),4) *100 as remote_2021
 from
 (select experience_level,count(*) as total_employees_2021
@@ -203,13 +192,10 @@ group by company_size
 --highest average salary Among part-time Positions IN the year 2023. However, you are Only Interested IN Countries WHERE there are more than 50 employees, Ensuring a robust
 --sample size for your analysis.
 
-
 select job_title,AVG(salary_in_usd) as avg_salary
 from salaries
 where work_year=2023 and employment_type='PT'
 group by job_title
-
-
 
 
 --12.	As a database analyst you have been assigned the task to Select Countries where average mid-level salary is higher than overall mid-level salary for the year 2023.
@@ -230,7 +216,6 @@ where experience_level='SE' and work_year=2023
 group by company_location
 order by avg_salary desc 
 
-
 select  top 1 company_location,AVG(salary_in_usd) as avg_salary 
 from salaries 
 where experience_level='SE' and work_year=2023
@@ -239,8 +224,6 @@ order by avg_salary asc
 
 --14.You're a Financial analyst Working for a leading HR Consultancy, and your Task is to Assess the annual salary growth rate for various job titles. By Calculating the percentage Increase
 --IN salary FROM previous year to this year, you aim to provide valuable Insights Into salary trends WITHIN different job roles.
-
-
 
 select a.job_title, avg_salary_23,avg_salary_24,
 case 
